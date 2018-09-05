@@ -50,4 +50,49 @@ def safe_base64_decode(s):
 assert b'abcd' == safe_base64_decode(b'YWJjZA=='), safe_base64_decode('YWJjZA==')
 assert b'abcd' == safe_base64_decode(b'YWJjZA'), safe_base64_decode('YWJjZA')
 print('ok')
+
+enStr = base64.b64encode(b'binary\x00string')
+print(enStr)
+deStr = base64.b64decode(enStr)
+print(deStr)
+
+import itertools
+def pi(N):
+	natuals = itertools.count(1, 2)
+	ns = itertools.takewhile(lambda x:x <= 2*N - 1, natuals)
+	ns = map(lambda x:(-1)**(x//2) * 4/x,ns)
+	return sum(ns)
+
+
+print(pi(10))
+print(pi(100))
+print(pi(1000))
+print(pi(10000))
+assert 3.04 < pi(10) < 3.05
+assert 3.13 < pi(100) < 3.14
+assert 3.140 < pi(1000) < 3.141
+assert 3.1414 < pi(10000) < 3.1415
+print('ok')
+
+
+class Query(object):
+
+	def __init__(self, name):
+		self.name = name
+
+	def __enter__(self):
+		print('Begin')
+		return self
+
+	def __exit__(self, exc_type, exc_value, traceback):
+		if exc_type:
+			print('Error')
+		else:
+			print('End')
+
+	def query(self):
+		print('Query info about %s ...' % self.name)
+
+with Query('Bob') as q:
+	q.query()
 	
